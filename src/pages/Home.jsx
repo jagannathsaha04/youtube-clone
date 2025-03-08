@@ -16,33 +16,38 @@ export default function Home() {
   }, [dispatch]);
 
   return (
-    <div className="max-h-screen overflow-auto">
+    <div className="max-h-screen overflow-hidden flex flex-col bg-[#212121]">
       {/* Navbar */}
-      <div style={{ height: "7.5vh" }}>
+      <div className="h-[7.5vh]">
         <NavBar />
       </div>
 
       {/* Main Content */}
-      <div className="flex" style={{ height: "92.5vh" }}>
+      <div className="flex w-full h-[92.5vh]">
         <Sidebar />
         
-        {!videos.length ? (
-          <Spinner />
-        ) : (
-          <InfiniteScroll
-            dataLength={videos.length}
-            next={() => dispatch(getHomePage(true))}
-            hasMore={videos.length<500}
-            loader={<Spinner/>}
-            height={650}
-          >
-            <div>
-              {videos.map((item)=>{
-                return <Card data={item} key={item.videoId}/>
-              })}
+        <div className="flex-1 overflow-hidden">
+          {!videos?.length ? (
+            <div className="flex justify-center items-center h-full">
+              <Spinner />
             </div>
-          </InfiniteScroll>
-        )}
+          ) : (
+            <InfiniteScroll
+              dataLength={videos.length}
+              next={() => dispatch(getHomePage(true))}
+              hasMore={videos.length < 500}
+              loader={<Spinner />}
+              height="calc(92.5vh - 16px)"
+              className="p-4"
+            >
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+                {videos.map((item) => (
+                  <Card data={item} key={item.videoId} />
+                ))}
+              </div>
+            </InfiniteScroll>
+          )}
+        </div>
       </div>
     </div>
   );

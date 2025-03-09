@@ -1,21 +1,25 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-// import './App.css'
-import './index.css'
-import Home from './pages/Home'
-import { BrowserRouter, Routes, Route } from 'react-router-dom'
+import { lazy, Suspense } from "react";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+import "./index.css";
+import Home from "./pages/Home";
+import Search from "./pages/Search";
+import Spinner from "./components/Spinner"; // Loading indicator
+
+// Lazy load the Watch page for better performance
+const Watch = lazy(() => import("./pages/Watch"));
 
 function App() {
-  const [count, setCount] = useState(0)
-
   return (
     <BrowserRouter>
-      <Routes>
-        <Route path='/' element={<Home/>} />
-      </Routes>
+      <Suspense fallback={<Spinner />}>
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/search" element={<Search />} />
+          <Route path="/watch/:videoId" element={<Watch />} />
+        </Routes>
+      </Suspense>
     </BrowserRouter>
-
-  )
+  );
 }
 
-export default App
+export default App;
